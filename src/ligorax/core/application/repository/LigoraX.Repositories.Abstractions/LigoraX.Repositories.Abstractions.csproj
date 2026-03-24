@@ -9,4 +9,10 @@
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\basePackages\Base.DataAccess\Base.DataAccess.csproj" />
+    <ProjectReference Include="..\..\..\..\..\basePackages\Base.Entity\Base.Entity.csproj" />
+    <ProjectReference Include="..\..\..\domain\LigoraX.Domain\LigoraX.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
