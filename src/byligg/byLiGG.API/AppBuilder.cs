@@ -1,4 +1,4 @@
-﻿using Base.Caching;
+using Base.Caching;
 using Base.Cookie;
 using Base.Factory;
 using Base.Logging;
@@ -34,6 +34,16 @@ namespace byLiGG.API
 		public static WebApplicationBuilder BuildApplication(this WebApplicationBuilder builder)
 		{
 			builder.Services.AddHttpContextAccessor();
+			builder.Services.AddCors(options =>
+			{
+				options.AddDefaultPolicy(policy =>
+				{
+					policy.WithOrigins(ProjectSettings.ClientUrl)
+						  .AllowAnyHeader()
+						  .AllowAnyMethod()
+						  .AllowCredentials();
+				});
+			});
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen(options =>
@@ -106,6 +116,7 @@ namespace byLiGG.API
 
 			app.UseStaticFiles();
 			app.UseRouting();
+			app.UseCors();
 
 			app.UseAuthentication();
 			app.UseAuthorization();
