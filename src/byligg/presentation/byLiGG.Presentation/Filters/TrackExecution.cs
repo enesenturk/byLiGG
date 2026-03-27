@@ -2,6 +2,7 @@
 using byLiGG.Domain.Language.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Globalization;
 
 namespace byLiGG.Presentation.Filters
 {
@@ -15,6 +16,14 @@ namespace byLiGG.Presentation.Filters
 				filterContext.Result = new UnauthorizedResult();
 
 				return;
+			}
+
+			string language = GetLanguage(filterContext);
+
+			if (!string.IsNullOrEmpty(language) && LanguageHelper.IsSupportedLanguage(language))
+			{
+				Thread.CurrentThread.CurrentUICulture = new CultureInfo(language);
+				Thread.CurrentThread.CurrentCulture = new CultureInfo(language);
 			}
 
 			string actionName = filterContext.RouteData.Values["action"].ToString();
@@ -40,9 +49,14 @@ namespace byLiGG.Presentation.Filters
 			return !string.IsNullOrEmpty(receivedKey) && receivedKey == ProjectSettings.ClientApiKey;
 		}
 
+		private string GetLanguage(ActionExecutingContext filterContext)
+		{
+			return filterContext.HttpContext.Request.Headers["Accept-Language"].FirstOrDefault();
+		}
+
 		private bool IsCorrectLanguage(ActionExecutingContext filterContext)
 		{
-			string language = filterContext.HttpContext.Request.Headers["Accept-Language"].FirstOrDefault();
+			string language = GetLanguage(filterContext);
 
 			return !string.IsNullOrEmpty(language) && LanguageHelper.IsSupportedLanguage(language);
 		}
