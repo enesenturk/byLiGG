@@ -12,6 +12,8 @@ namespace byLiGG.Repositories
 			services.AddScoped<ICompetitionRepository, EfCompetitionRepository>();
 			services.AddScoped<ICountryRepository, EfCountryRepository>();
 			services.AddScoped<IDerbyRepository, EfDerbyRepository>();
+			services.AddScoped<IHandlerCallLogRepository, EfHandlerCallLogRepository>();
+			services.AddScoped<IHandlerCallLogByUserRepository, EfHandlerCallLogByUserRepository>();
 			services.AddScoped<ILeaderboardSnapshotRepository, EfLeaderboardSnapshotRepository>();
 			services.AddScoped<ILoginLogRepository, EfLoginLogRepository>();
 			services.AddScoped<IMatchRepository, EfMatchRepository>();

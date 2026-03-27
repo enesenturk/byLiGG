@@ -1,6 +1,7 @@
 ﻿using Base.Validation.Pipelines;
-using FluentValidation;
 using byLiGG.Application.UseCases.Modules.User.Commands.CreateUserRegistrationCommand.BusinessRules;
+using byLiGG.Application.UseCases.Pipelines;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -34,6 +35,7 @@ namespace byLiGG.Application.UseCases
 
 		public static IServiceCollection AddPipelines(this IServiceCollection services)
 		{
+			services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestMetricsBehavior<,>));
 			services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
 			return services;

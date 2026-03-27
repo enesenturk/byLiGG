@@ -16,6 +16,10 @@ namespace byLiGG.Persistence.Contexts
 		{
 		}
 
+		public virtual DbSet<t_handler_call_log> t_handler_call_logs { get; set; }
+
+		public virtual DbSet<t_handler_call_log_by_user> t_handler_call_log_by_users { get; set; }
+
 		public virtual DbSet<t_badge> t_badges { get; set; }
 
 		public virtual DbSet<t_competition> t_competitions { get; set; }
@@ -63,6 +67,38 @@ namespace byLiGG.Persistence.Contexts
 			modelBuilder
 				.HasPostgresExtension("citext")
 				.HasPostgresExtension("uuid-ossp");
+
+			modelBuilder.Entity<t_handler_call_log>(entity =>
+			{
+				entity.HasKey(e => e.id).HasName("t_handler_call_log_pkey");
+
+				entity.ToTable("t_handler_call_log");
+
+				entity.Property(e => e.id).HasDefaultValueSql("uuid_generate_v4()");
+				entity.Property(e => e.handler_name)
+					.IsRequired()
+					.HasMaxLength(200);
+				entity.Property(e => e.error_type).HasMaxLength(100);
+			});
+
+			modelBuilder.Entity<t_handler_call_log_by_user>(entity =>
+			{
+				entity.HasKey(e => e.id).HasName("t_handler_call_log_by_user_pkey");
+
+				entity.ToTable("t_handler_call_log_by_user");
+
+				entity.Property(e => e.id).HasDefaultValueSql("uuid_generate_v4()");
+				
+				entity.Property(e => e.handler_name)
+					.IsRequired()
+					.HasMaxLength(200);
+
+				entity.HasOne<t_user>()
+					.WithMany()
+					.HasForeignKey(e => e.t_user_id)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("t_handler_call_log_by_user_t_user_id_fkey");
+			});
 
 			modelBuilder.Entity<t_badge>(entity =>
 			{
