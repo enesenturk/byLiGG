@@ -1,4 +1,5 @@
 ﻿using Base.Exceptions.ExceptionModels;
+using Base.PrimitiveTypeHelpers._DateTime.Entensions;
 using byLiGG.Authorization.Models.Context.Authentication;
 using byLiGG.Authorization.Models.Context.Authorization;
 using byLiGG.Authorization.Models.Request;
@@ -78,7 +79,7 @@ namespace byLiGG.Presentation.Pipelines
 			if (!string.IsNullOrEmpty(expClaim) && long.TryParse(expClaim, out long expUnix))
 				return DateTimeOffset.FromUnixTimeSeconds(expUnix).UtcDateTime;
 
-			return DateTime.UtcNow;
+			return DateTime.Now.ToUniversalTimeZone();
 		}
 
 		private string GetIpAddress()

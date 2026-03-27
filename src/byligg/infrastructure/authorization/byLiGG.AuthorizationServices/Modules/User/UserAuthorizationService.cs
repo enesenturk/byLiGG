@@ -1,4 +1,5 @@
-﻿using byLiGG.AuthorizationServices.Abstractions.Modules.User.Services;
+﻿using Base.PrimitiveTypeHelpers._DateTime.Entensions;
+using byLiGG.AuthorizationServices.Abstractions.Modules.User.Services;
 using byLiGG.Configuration.AppSettings;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -29,7 +30,7 @@ namespace byLiGG.AuthorizationServices.Modules.User
 				issuer: JwtSettings.Issuer,
 				audience: JwtSettings.Audience,
 				claims: claims,
-				expires: DateTime.UtcNow.AddDays(JwtSettings.ExpiryDays),
+				expires: DateTime.Now.ToUniversalTimeZone().AddDays(JwtSettings.ExpiryDays),
 				signingCredentials: credentials
 			);
 
