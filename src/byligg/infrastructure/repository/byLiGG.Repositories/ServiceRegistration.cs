@@ -12,14 +12,13 @@ namespace byLiGG.Repositories
 			services.AddScoped<ICompetitionRepository, EfCompetitionRepository>();
 			services.AddScoped<ICountryRepository, EfCountryRepository>();
 			services.AddScoped<IDerbyRepository, EfDerbyRepository>();
-			services.AddScoped<IHandlerCallLogRepository, EfHandlerCallLogRepository>();
-			services.AddScoped<IHandlerCallLogByUserRepository, EfHandlerCallLogByUserRepository>();
 			services.AddScoped<ILeaderboardSnapshotRepository, EfLeaderboardSnapshotRepository>();
 			services.AddScoped<ILoginLogRepository, EfLoginLogRepository>();
 			services.AddScoped<IMatchRepository, EfMatchRepository>();
 			services.AddScoped<IPredictionRepository, EfPredictionRepository>();
 			services.AddScoped<IPrivateLeagueRepository, EfPrivateLeagueRepository>();
 			services.AddScoped<IPrivateLeagueMemberRepository, EfPrivateLeagueMemberRepository>();
+			services.AddScoped<IRequestTelemetryRepository, EfRequestTelemetryRepository>();
 			services.AddScoped<IScoringRuleRepository, EfScoringRuleRepository>();
 			services.AddScoped<ISystemPropertyRepository, EfSystemPropertyRepository>();
 			services.AddScoped<ISystemPropertyTypeRepository, EfSystemPropertyTypeRepository>();

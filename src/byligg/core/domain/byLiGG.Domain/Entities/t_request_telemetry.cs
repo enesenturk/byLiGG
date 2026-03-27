@@ -2,9 +2,9 @@ using Base.Entity;
 
 namespace byLiGG.Domain.Entities;
 
-public partial class t_handler_call_log_by_user : IMutationEntity
+public partial class t_request_telemetry : IMutationEntity
 {
-	public Guid t_user_id { get; set; }
+	public Guid? t_user_id { get; set; }
 
 	public string handler_name { get; set; }
 

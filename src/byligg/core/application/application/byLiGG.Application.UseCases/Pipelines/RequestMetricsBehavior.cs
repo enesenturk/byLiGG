@@ -14,13 +14,11 @@ namespace byLiGG.Application.UseCases.Pipelines
 
 		#region CTOR
 
-		private readonly IHandlerCallLogRepository _handlerCallLogRepository;
-		private readonly IHandlerCallLogByUserRepository _handlerCallLogByUserRepository;
+		private readonly IRequestTelemetryRepository _requestTelemetryRepository;
 
-		public RequestMetricsBehavior(IHandlerCallLogRepository handlerCallLogRepository, IHandlerCallLogByUserRepository handlerCallLogByUserRepository)
+		public RequestMetricsBehavior(IRequestTelemetryRepository requestTelemetryRepository)
 		{
-			_handlerCallLogRepository = handlerCallLogRepository;
-			_handlerCallLogByUserRepository = handlerCallLogByUserRepository;
+			_requestTelemetryRepository = requestTelemetryRepository;
 		}
 
 		#endregion
@@ -29,16 +27,14 @@ namespace byLiGG.Application.UseCases.Pipelines
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 			bool isSuccess = true;
-			string errorType = null;
 
 			try
 			{
 				return await next();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				isSuccess = false;
-				errorType = ex.GetType().Name;
 
 				throw;
 			}
@@ -46,42 +42,29 @@ namespace byLiGG.Application.UseCases.Pipelines
 			{
 				stopwatch.Stop();
 
-				string handlerName = typeof(TRequest).Name;
-				int durationMs = (int)stopwatch.ElapsedMilliseconds;
-				Guid? userId = ExtractUserId(request);
+				Guid userId = ExtractUserId(request);
 
-				await _handlerCallLogRepository.AddAsync(new t_handler_call_log
+				await _requestTelemetryRepository.AddAsync(new t_request_telemetry
 				{
-					handler_name = handlerName,
-					duration_ms = durationMs,
+					t_user_id = userId,
+					handler_name = typeof(TRequest).Name,
+					duration_ms = (int)stopwatch.ElapsedMilliseconds,
 					is_success = isSuccess,
-					error_type = errorType,
-				}, SystemConstants.SystemUserId);
-
-				if (userId.HasValue)
-				{
-					await _handlerCallLogByUserRepository.AddAsync(new t_handler_call_log_by_user
-					{
-						t_user_id = userId.Value,
-						handler_name = handlerName,
-						duration_ms = durationMs,
-						is_success = isSuccess,
-					}, userId.Value);
-				}
+				}, userId);
 			}
 		}
 
 		#region Behind the Scenes
 
-		private static Guid? ExtractUserId(TRequest request)
+		private static Guid ExtractUserId(TRequest request)
 		{
 			if (request is IAuthorizationRequest<TResponse> auth)
-				return auth.Authorization?.ExecutingUserId;
+				return auth.Authorization?.ExecutingUserId ?? SystemConstants.SystemUserId;
 
 			if (request is IAuthorizationFreeRequest<TResponse> authFree)
-				return authFree.AuthorizationFree?.ExecutingUserId;
+				return authFree.AuthorizationFree?.ExecutingUserId ?? SystemConstants.SystemUserId;
 
-			return null;
+			return SystemConstants.SystemUserId;
 		}
 
 		#endregion

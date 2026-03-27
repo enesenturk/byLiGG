@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using byLiGG.Application.Constants;
 using byLiGG.Application.UseCases.Modules.User.Commands.CreateUserRegistrationCommand.Dtos;
 using byLiGG.Domain.Entities;
 
@@ -14,7 +13,6 @@ namespace byLiGG.Application.UseCases.Modules.User.Commands.CreateUserRegistrati
 				.ForMember(dest => dest.email, opt => opt.MapFrom(src => src.Email))
 				.ForMember(dest => dest.display_name, opt => opt.MapFrom(src => src.DisplayName))
 				.ForMember(dest => dest.language_preference, opt => opt.MapFrom(src => src.LanguagePreference))
-				.ForMember(dest => dest.theme, opt => opt.MapFrom(src => SystemConstants.DefaultTheme))
 				.ForMember(dest => dest.is_active, opt => opt.MapFrom(src => true))
 				.ForMember(dest => dest.is_verified, opt => opt.MapFrom(src => false));
 

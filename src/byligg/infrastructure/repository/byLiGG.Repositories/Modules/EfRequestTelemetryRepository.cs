@@ -5,7 +5,7 @@ using byLiGG.Repositories.Abstractions.Modules;
 
 namespace byLiGG.Repositories.Modules
 {
-	public class EfHandlerCallLogRepository : EfMutationRepositoryBase<t_handler_call_log, byliggContext>, IHandlerCallLogRepository
+	public class EfRequestTelemetryRepository : EfMutationRepositoryBase<t_request_telemetry, byliggContext>, IRequestTelemetryRepository
 	{
 	}
 }

@@ -16,9 +16,7 @@ namespace byLiGG.Persistence.Contexts
 		{
 		}
 
-		public virtual DbSet<t_handler_call_log> t_handler_call_logs { get; set; }
-
-		public virtual DbSet<t_handler_call_log_by_user> t_handler_call_log_by_users { get; set; }
+		public virtual DbSet<t_request_telemetry> t_request_telemetries { get; set; }
 
 		public virtual DbSet<t_badge> t_badges { get; set; }
 
@@ -68,27 +66,14 @@ namespace byLiGG.Persistence.Contexts
 				.HasPostgresExtension("citext")
 				.HasPostgresExtension("uuid-ossp");
 
-			modelBuilder.Entity<t_handler_call_log>(entity =>
+			modelBuilder.Entity<t_request_telemetry>(entity =>
 			{
-				entity.HasKey(e => e.id).HasName("t_handler_call_log_pkey");
+				entity.HasKey(e => e.id).HasName("t_request_telemetry_pkey");
 
-				entity.ToTable("t_handler_call_log");
+				entity.ToTable("t_request_telemetry");
 
 				entity.Property(e => e.id).HasDefaultValueSql("uuid_generate_v4()");
-				entity.Property(e => e.handler_name)
-					.IsRequired()
-					.HasMaxLength(200);
-				entity.Property(e => e.error_type).HasMaxLength(100);
-			});
 
-			modelBuilder.Entity<t_handler_call_log_by_user>(entity =>
-			{
-				entity.HasKey(e => e.id).HasName("t_handler_call_log_by_user_pkey");
-
-				entity.ToTable("t_handler_call_log_by_user");
-
-				entity.Property(e => e.id).HasDefaultValueSql("uuid_generate_v4()");
-				
 				entity.Property(e => e.handler_name)
 					.IsRequired()
 					.HasMaxLength(200);
@@ -97,7 +82,7 @@ namespace byLiGG.Persistence.Contexts
 					.WithMany()
 					.HasForeignKey(e => e.t_user_id)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("t_handler_call_log_by_user_t_user_id_fkey");
+					.HasConstraintName("t_request_telemetry_t_user_id_fkey");
 			});
 
 			modelBuilder.Entity<t_badge>(entity =>
@@ -206,7 +191,6 @@ namespace byLiGG.Persistence.Contexts
 
 				entity.Property(e => e.id).HasDefaultValueSql("uuid_generate_v4()");
 				entity.Property(e => e.ip_address)
-					.IsRequired()
 					.HasMaxLength(45);
 
 				entity.HasOne(d => d.t_user).WithMany(p => p.t_login_logs)
@@ -414,9 +398,6 @@ namespace byLiGG.Persistence.Contexts
 				entity.Property(e => e.language_preference)
 					.IsRequired()
 					.HasMaxLength(10);
-				entity.Property(e => e.theme)
-					.IsRequired()
-					.HasMaxLength(20);
 				entity.Property(e => e.username)
 					.IsRequired()
 					.HasColumnType("citext");

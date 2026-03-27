@@ -16,8 +16,6 @@ public partial class t_user : IMutationEntity
 
 	public Guid? t_team_id { get; set; }
 
-	public string theme { get; set; }
-
 	public string language_preference { get; set; }
 
 	public bool is_active { get; set; }
